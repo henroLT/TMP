@@ -1,4 +1,11 @@
 #include <type_traits>
+// result
+template <int A, int B>
+struct Result {
+   static constexpr int first = A;
+   static constexpr int second = B;
+};
+struct NoResult{};
 
 // type list
 template <int... Values>
@@ -26,13 +33,26 @@ template <int Val, typename List>
 struct twosum;
 
 template <int Val>
-struct twosum<Val, type_list<>> : std::false_type {};
+struct twosum<Val, type_list<>>
+{
+   static constexpr bool found = false;
+   using result = NoResult;
+};
 
 template <int Sum, int Head, int... Tail>
 struct twosum<Sum, type_list<Head, Tail...>>
-   : std::conditional<
-      contains<Sum - Head, type_list<Tail...>>::value,
-      std::true_type,
-      twosum<Sum, type_list<Tail...>>
-   >::type
-{};
+{
+private:
+   static constexpr bool here =
+      contains<Sum - Head, type_list<Tail...>>::value;
+
+public:
+   static constexpr bool found =
+      here || twosum<Sum, type_list<Tail...>>::found;
+   
+   using result = typename std::conditional<
+      here,
+      Result<Head, Sum - Head>,
+      typename twosum<Sum, type_list<Tail...>>::result
+   >::type;
+};
