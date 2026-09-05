@@ -4,21 +4,6 @@
 #include <type_traits>
 #include <cstddef>
 
-
-
-/*
-    A list of types:
-        exposes:
-            size
-            empty
-            contains
-            append      (to end)
-            remove      (removes first occurence)
-            remove_all  (removes all of a type)
-*/
-
-
-
 template <typename... Ts>
 struct type_list;
 
@@ -42,7 +27,6 @@ struct contains<T, type_list<Head, Tail...>> :
 {};
 
 
-
 // Remove First Occurance
 template <typename T, typename List, typename Acc = type_list<>>
 struct remove;
@@ -63,7 +47,6 @@ template <typename T, typename Head, typename... Tail, typename... Acc>
 struct remove<T, type_list<Head, Tail...>, type_list<Acc...>> :
     remove<T, type_list<Tail...>, type_list<Acc..., Head>>
 {};
-
 
 
 // Remove All Occurance
