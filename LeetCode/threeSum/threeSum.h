@@ -2,8 +2,8 @@
 #define threeSum_threeSum_h
 
 #include <type_traits>
-#include "util/type_list.h"
-#include "util/value_list.h"
+#include "Util/type_list.h"
+#include "Util/value_list.h"
 
 // three_sum inner
 template <int Val, int A, typename List, typename Acc>
