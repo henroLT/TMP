@@ -10,7 +10,7 @@ int main() {
     >::result;
     static_assert(R1::size == 2, "Failure");
     static_assert(R1::at<0> + R1::at<1> == 9, "Failure");
-    std::cout << R1::at<0> << " " << R1::at<1> << '\n';
+    std::cout << "Target: " << 9 << '\n' << R1::at<0> << " " << R1::at<1> << '\n';
 
     using R2 = twosum<
         20,
@@ -18,7 +18,7 @@ int main() {
     >::result;
     static_assert(R2::size == 2, "Failure");
     static_assert(R2::at<0> + R2::at<1> == 20, "Failure");
-    std::cout << R2::at<0> << " " << R2::at<1> << '\n';
+    std::cout << "Target: " << 20 << '\n' << R2::at<0> << " " << R2::at<1> << '\n';
 
     using R3 = twosum<
         10,
@@ -26,7 +26,7 @@ int main() {
     >::result;
     static_assert(R3::size == 2, "Failure");
     static_assert(R3::at<0> + R3::at<1> == 10, "Failure");
-    std::cout << R3::at<0> << " " << R3::at<1> << '\n';
+    std::cout << "Target: " << 10 << '\n' << R3::at<0> << " " << R3::at<1> << '\n';
 
     using R4 = twosum<
         0,
@@ -34,7 +34,7 @@ int main() {
     >::result;
     static_assert(R4::size == 2, "Failure");
     static_assert(R4::at<0> + R4::at<1> == 0, "Failure");
-    std::cout << R4::at<0> << " " << R4::at<1> << '\n';
+    std::cout << "Target: " << 0 << '\n' << R4::at<0> << " " << R4::at<1> << '\n';
 
     // No solution
     using R5 = twosum<
