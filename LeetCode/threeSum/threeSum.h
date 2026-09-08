@@ -21,11 +21,11 @@ struct three_sum_inner<Val, A, util::value_list<int, B, Tail...>, Acc>
 private:
     static constexpr int C = Val - A - B;
     static constexpr bool Exists =
-        util::value_list<int, Tail...>::template contains<C>;
+        util::value_list<int, Tail...>::template contains<C>::value;
     
     using Triple = util::value_list<int, A, B, C>;
     using New_Acc = typename std::conditional<
-        Exists && !Acc::template contains<Triple>,
+        Exists && !Acc::template contains<Triple>::value,
         typename Acc::template append<Triple>,
         Acc
     >::type;

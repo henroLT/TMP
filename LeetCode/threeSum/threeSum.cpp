@@ -19,9 +19,9 @@ struct print_triples<util::type_list<Triple, Tail...>>
 {
     static void print()
     {
-        std::cout << Triple::template at<0> << " "
-                  << Triple::template at<1> << " "
-                  << Triple::template at<2> << '\n';
+        std::cout << Triple::template at<0>::value << " "
+                  << Triple::template at<1>::value << " "
+                  << Triple::template at<2>::value << '\n';
         print_triples<util::type_list<Tail...>>::print();
     }
 };
@@ -36,9 +36,9 @@ int main()
         util::value_list<int, 1, 2, 3, 4, 5, 6, 7>
     >::result;
     static_assert(R1::size == 3, "Failure");
-    static_assert(R1::contains<util::value_list<int, 1, 2, 6>>, "Failure");
-    static_assert(R1::contains<util::value_list<int, 1, 3, 5>>, "Failure");
-    static_assert(R1::contains<util::value_list<int, 2, 3, 4>>, "Failure");
+    static_assert(R1::contains<util::value_list<int, 1, 2, 6>>::value, "Failure");
+    static_assert(R1::contains<util::value_list<int, 1, 3, 5>>::value, "Failure");
+    static_assert(R1::contains<util::value_list<int, 2, 3, 4>>::value, "Failure");
     std::cout << "Target: 9\n";
     print_triples<R1>::print();
 
@@ -47,8 +47,8 @@ int main()
         util::value_list<int, 1, 2, 3, 5, 7, 8>
     >::result;
     static_assert(R2::size == 2, "Failure");
-    static_assert(R2::contains<util::value_list<int, 1, 2, 7>>, "Failure");
-    static_assert(R2::contains<util::value_list<int, 2, 3, 5>>, "Failure");
+    static_assert(R2::contains<util::value_list<int, 1, 2, 7>>::value, "Failure");
+    static_assert(R2::contains<util::value_list<int, 2, 3, 5>>::value, "Failure");
     std::cout << "Target: 10\n";
     print_triples<R2>::print();
 
@@ -57,8 +57,8 @@ int main()
         util::value_list<int, 5, 5, 7, 8, -3, -2>
     >::result;
     static_assert(R3::size == 2, "Failure");
-    static_assert(R3::contains<util::value_list<int, 5, 8, -3>>, "Failure");
-    static_assert(R3::contains<util::value_list<int, 5, 7, -2>>, "Failure");
+    static_assert(R3::contains<util::value_list<int, 5, 8, -3>>::value, "Failure");
+    static_assert(R3::contains<util::value_list<int, 5, 7, -2>>::value, "Failure");
     std::cout << "Target: 10\n";
     print_triples<R3>::print();
 
@@ -68,9 +68,9 @@ int main()
         util::value_list<int, -5, -2, 0, 2, 5, 7>
     >::result;
     static_assert(R4::size == 3, "Failure");
-    static_assert(R4::contains<util::value_list<int, -5, -2, 7>>, "Failure");
-    static_assert(R4::contains<util::value_list<int, -5, 0, 5>>, "Failure");
-    static_assert(R4::contains<util::value_list<int, -2, 0, 2>>, "Failure");
+    static_assert(R4::contains<util::value_list<int, -5, -2, 7>>::value, "Failure");
+    static_assert(R4::contains<util::value_list<int, -5, 0, 5>>::value, "Failure");
+    static_assert(R4::contains<util::value_list<int, -2, 0, 2>>::value, "Failure");
     std::cout << "Target: 0\n";
     print_triples<R4>::print();
 
