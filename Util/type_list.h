@@ -121,25 +121,25 @@ struct type_list
     static constexpr bool empty = (sizeof...(Ts) == 0);
 
     template <typename Elem>
-    static constexpr bool contains = detail::type_list_contains<
+    using contains = detail::type_list_contains<
         Elem, type_list<Ts...>
-    >::value;
+    >;
 
     template <typename Elem>
     using append = type_list<Ts..., Elem>;
 
     template <typename Elem>
-    using remove = detail::type_list_remove<
+    using remove = typename detail::type_list_remove<
         Elem, type_list<Ts...>
     >::type;
 
     template <typename Elem>
-    using remove_all = detail::type_list_remove_all<
+    using remove_all = typename detail::type_list_remove_all<
         Elem, type_list<Ts...>
     >::type;
 
     template <std::size_t Idx>
-    using at = detail::type_list_at<
+    using at = typename detail::type_list_at<
         Idx, type_list<Ts...>
     >::type;
 };

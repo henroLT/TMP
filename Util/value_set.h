@@ -61,10 +61,9 @@ template <std::size_t Target, typename List>
 struct value_set_at;
 
 template <typename T, T Head, T... Tail>
-struct value_set_at<0, value_set<T, Head, Tail...>>
-{
-    static constexpr T value = Head;
-};
+struct value_set_at<0, value_set<T, Head, Tail...>> :
+    std::integral_constant<T, Head>
+{};
 
 template <std::size_t Target, typename T, T Head, T... Tail>
 struct value_set_at<Target, value_set<T, Head, Tail...>> :
@@ -114,27 +113,27 @@ struct value_set
     static constexpr bool empty = (sizeof...(Ts) == 0);
 
     template <T Elem>
-    static constexpr bool contains = detail::value_set_contains<
+    using contains = detail::value_set_contains<
         T,
         Elem,
         value_set<T, Ts...>
-    >::value;
+    >;
 
     template <std::size_t Idx>
-    static constexpr T at = detail::value_set_at<
+    using at = detail::value_set_at<
         Idx,
         value_set<T, Ts...>
-    >::value;
+    >;
 
     template <T Elem>
-    using remove = detail::value_set_remove<
+    using remove = typename detail::value_set_remove<
         T,
         Elem,
         value_set<T, Ts...>
     >::type;
 
     template <T Elem>
-    using append = std::conditional<
+    using append = typename std::conditional<
         detail::value_set_contains<T, Elem, value_set<T, Ts...>>::value,
         value_set<T, Ts...>,
         value_set<T, Ts..., Elem>

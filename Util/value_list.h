@@ -101,10 +101,9 @@ template <std::size_t Target, typename List>
 struct value_list_at;
 
 template <typename T, T Head, T... Tail>
-struct value_list_at<0, value_list<T, Head, Tail...>>
-{
-    static constexpr T value = Head;
-};
+struct value_list_at<0, value_list<T, Head, Tail...>> :
+    std::integral_constant<T, Head>
+{};
 
 template <std::size_t Target, typename T, T Head, T... Tail>
 struct value_list_at<Target, value_list<T, Head, Tail...>> :
@@ -128,31 +127,31 @@ struct value_list
     using append = value_list<T, Ts..., Elem>;
 
     template <T Elem>
-    static constexpr bool contains = detail::value_list_contains<
+    using contains = detail::value_list_contains<
         T,
         Elem,
         value_list<T, Ts...>
-    >::value;
+    >;
 
     template <T Elem>
-    using remove = detail::value_list_remove<
+    using remove = typename detail::value_list_remove<
         T,
         Elem,
         value_list<T, Ts...>
     >::type;
 
     template <T Elem>
-    using remove_all = detail::value_list_remove_all<
+    using remove_all = typename detail::value_list_remove_all<
         T,
         Elem,
         value_list<T, Ts...>
     >::type;
 
     template <std::size_t Idx>
-    static constexpr T at = detail::value_list_at<
+    using at = detail::value_list_at<
         Idx,
         value_list<T, Ts...>
-    >::value;
+    >;
 };
 
 // Unspecified Value List
