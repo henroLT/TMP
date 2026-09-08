@@ -7,6 +7,8 @@
 /*
     * value_list
     *
+    * Compile time list of values for type T
+    *
     * Operations:
     *   size:             Number of elements.
     *   empty:            Whether the list is empty.
@@ -42,7 +44,11 @@ struct value_list_contains<T, Elem, value_list<T, Head, Tail...>> :
     std::conditional<
         Elem == Head,
         std::true_type,
-        value_list_contains<T, Elem, value_list<T, Tail...>>
+        value_list_contains<
+            T,
+            Elem,
+            value_list<T, Tail...>
+        >
     >::type
 {};
 
@@ -116,50 +122,37 @@ template <typename T, T... Ts>
 struct value_list
 {
     static constexpr std::size_t size = sizeof...(Ts);
-    static constexpr bool empty = false;
+    static constexpr bool empty = (sizeof...(Ts) == 0);
 
     template <T Elem>
     using append = value_list<T, Ts..., Elem>;
 
     template <T Elem>
     static constexpr bool contains = detail::value_list_contains<
-        T, Elem, value_list<T, Ts...>
+        T,
+        Elem,
+        value_list<T, Ts...>
     >::value;
 
     template <T Elem>
     using remove = detail::value_list_remove<
-        T, Elem, value_list<T, Ts...>
+        T,
+        Elem,
+        value_list<T, Ts...>
     >::type;
 
     template <T Elem>
     using remove_all = detail::value_list_remove_all<
-        T, Elem, value_list<T, Ts...>
+        T,
+        Elem,
+        value_list<T, Ts...>
     >::type;
 
     template <std::size_t Idx>
     static constexpr T at = detail::value_list_at<
-        Idx, value_list<T, Ts...>
+        Idx,
+        value_list<T, Ts...>
     >::value;
-};
-
-// Empty Value List
-template <typename T>
-struct value_list<T>
-{
-    static constexpr std::size_t size = 0;
-    static constexpr bool empty = true;
-
-    template <T Elem>
-    using append = value_list<T, Elem>;
-
-    template <T Elem>
-    static constexpr bool contains = false;
-
-    template <T Elem>
-    using remove = value_list<T>;
-
-    template <T Elem>
-    using remove_all = value_list<T>;
 };
 
 // Unspecified Value List

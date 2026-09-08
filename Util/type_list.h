@@ -5,20 +5,20 @@
 #include <cstddef>
 
 /*
-    * value_list
+    * type_list
+    *
+    * Compile time list of types.
     *
     * Operations:
     *   size:            Number of elements.
     *   empty:           Whether the list is empty.
-    *   contains<Val>:   Whether Val is in the list.
-    *   append<Val>:     Appends Val to the end.
-    *   remove<Val>:     Removes the first occurrence of Val.
-    *   remove_all<Val>: Removes all occurrences of Val.
-    *   at<Idx>:         Retrieves the value at index Idx.
-    *                    at<Idx> is only valid for valid indices.
+    *   contains<T>:     Whether T is in the list.
+    *   append<T>:       Appends T to the end.
+    *   remove<T>:       Removes the first occurrence of T.
+    *   remove_all<T>:   Removes all occurrences of T.
+    *   at<Idx>:         Retrieves the type at index Idx.
+    *                     Only valid for valid indexs
     *
-    * For value_list<>:
-    *   typeify<T>:     Converts an unspecified value_list to value_list<T>.
 */
 
 namespace util {
@@ -41,7 +41,10 @@ struct type_list_contains<T, type_list<Head, Tail...>> :
     std::conditional<
         std::is_same<T, Head>::value,
         std::true_type,
-        type_list_contains<T, type_list<Tail...>>
+        type_list_contains<
+            T,
+            type_list<Tail...>
+        >
     >::type
 {};
 
@@ -115,7 +118,7 @@ template <typename... Ts>
 struct type_list
 {
     static constexpr std::size_t size = sizeof...(Ts);
-    static constexpr bool empty = false;
+    static constexpr bool empty = (sizeof...(Ts) == 0);
 
     template <typename Elem>
     static constexpr bool contains = detail::type_list_contains<
@@ -139,26 +142,6 @@ struct type_list
     using at = detail::type_list_at<
         Idx, type_list<Ts...>
     >::type;
-};
-
-// Empty Type List
-template <>
-struct type_list<>
-{
-    static constexpr std::size_t size = 0;
-    static constexpr bool empty = true;
-
-    template <typename Search>
-    static constexpr bool contains = false;
-
-    template <typename Elem>
-    using append = type_list<Elem>;
-
-    template <typename Elem>
-    using remove = type_list<>;
-    
-    template <typename Elem>
-    using remove_all = type_list<>;
 };
 
 } // namespace util
