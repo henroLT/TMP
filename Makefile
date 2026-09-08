@@ -1,27 +1,23 @@
 CXX := g++
-CXXFLAGS := -std=c++20 -Wall -Wextra -pedantic -I.
+CXXFLAGS := -std=c++20 -Wall -Wextra -pedantic \
+            -I. \
+            -ILeetCode
 
 SRC_DIR := .
 BIN_DIR := bin
 
-SRCS := $(shell find $(SRC_DIR) -name "*.cpp")
+SRCS := $(shell find $(SRC_DIR) -name "*.cpp" -not -path "./$(BIN_DIR)/*")
 OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
 EXES := $(SRCS:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%)
 
 all: $(EXES)
 
-# Build a specific directory:
-twoSum:
-	$(MAKE) $(BIN_DIR)/twoSum/twoSum
-
-threeSum:
-	$(MAKE) $(BIN_DIR)/threeSum/threeSum
-
-# link
+# Link
 $(BIN_DIR)/%: $(BIN_DIR)/%.o
+	@mkdir -p $(dir $@)
 	$(CXX) $< -o $@
 
-# compile
+# Compile
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -29,4 +25,4 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
 clean:
 	rm -rf $(BIN_DIR)
 
-.PHONY: all clean twoSum threeSum
+.PHONY: all clean
